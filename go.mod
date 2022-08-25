@@ -1,3 +1,3 @@
-module github.com/bhechinger/ingress_whitelist
+module github.com/bhechinger/k8s_nginx_ingress_whitelist
 
-go 1.17
+go 1.19
