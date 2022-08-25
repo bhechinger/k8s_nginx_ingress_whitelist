@@ -14,7 +14,7 @@ type ConfigMap struct {
 	Namespace string `conf:"default:ingress,env:NGINX_CONFIG_MAP_NAMESPACE"`
 }
 type Config struct {
-	NginxAnnotation string   `conf:"default:whitelist-source-range,env:NGINX_ANNOTATION"`
+	NginxConfigName string   `conf:"default:whitelist-source-range,env:NGINX_ANNOTATION"`
 	SourceURIs      []string `conf:"default:https://www.cloudflare.com/ips-v4;https://www.cloudflare.com/ips-v6,env:NGINX_SOURCE_URIs"`
 	ConfigMap
 	conf.Version

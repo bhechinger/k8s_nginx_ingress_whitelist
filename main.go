@@ -47,7 +47,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	data[cfg.NginxAnnotation] = cidrs
+	data[cfg.NginxConfigName] = cidrs
 
 	newConfigMap.Data = data
 
