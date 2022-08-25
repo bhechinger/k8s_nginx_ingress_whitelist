@@ -53,6 +53,7 @@ func main() {
 
 	// if the lists are different update the ConfigMap
 	if configMap.Data[cfg.NginxConfigName] != newConfigMap.Data[cfg.NginxConfigName] {
+		log.Println("Updating ConfigMap")
 		_, err = k8sClientSet.CoreV1().ConfigMaps(cfg.ConfigMap.Namespace).Update(context.Background(), newConfigMap, metav1.UpdateOptions{})
 		if err != nil {
 			log.Fatal(err)
