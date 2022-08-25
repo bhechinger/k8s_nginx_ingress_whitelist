@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ type Config struct {
 
 const namespace = "INGRESS_WHITELIST"
 
-func getConfig(svn, desc string) (*Config, error) {
+func New(svn, desc string) (*Config, error) {
 	if svn == "" || desc == "" {
 		return nil, fmt.Errorf("missing version or description (both are required)")
 	}

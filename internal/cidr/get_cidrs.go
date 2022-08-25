@@ -1,4 +1,4 @@
-package main
+package cidr
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func getCIDRList(uris []string) (string, error) {
+func GetCIDRList(uris []string) (string, error) {
 	var cidrList []string
 
 	for i := range uris {

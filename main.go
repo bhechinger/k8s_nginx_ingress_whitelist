@@ -3,28 +3,30 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 
+	"github.com/bhechinger/k8s_nginx_ingress_whitelist/internal/cidr"
+	"github.com/bhechinger/k8s_nginx_ingress_whitelist/internal/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/rest"
 )
 
 func main() {
-	cfg, err := getConfig("0.0.1", "K8s CronJob to update NGINX Ingress whitelist")
+	cfg, err := config.New("0.0.1", "K8s CronJob to update NGINX Ingress whitelist")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	k8sConfig, err := clientcmd.BuildConfigFromFlags("", os.Getenv("KUBECONFIG"))
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// k8sConfig, err := rest.InClusterConfig()
+	// TODO: Maybe make this so you can run outside of the cluster. I'm not sure why anyone would want to do that, however.
+	// k8sConfig, err := clientcmd.BuildConfigFromFlags("", os.Getenv("KUBECONFIG"))
 	// if err != nil {
-	// 	log.Fatal(err)
+	// 	panic(err.Error())
 	// }
+
+	k8sConfig, err := rest.InClusterConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	k8sClientSet, err := kubernetes.NewForConfig(k8sConfig)
 	if err != nil {
@@ -42,7 +44,7 @@ func main() {
 		data = make(map[string]string)
 	}
 
-	cidrs, err := getCIDRList(cfg.SourceURIs)
+	cidrs, err := cidr.GetCIDRList(cfg.SourceURIs)
 	if err != nil {
 		log.Fatal(err)
 	}
