@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: ingress
+  name: ingress-whitelist
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ingress-whitelist-configmap-updater
+  namespace: ingress
+subjects:
+- kind: ServiceAccount
+  name: ingress-whitelist
+  namespace: ingress
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: ingress-whitelist-configmap-updater
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: ingress
+  name: ingress-whitelist-configmap-updater
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["nginx-load-balancer-microk8s-conf"]
+    verbs: ["update", "get"]
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ingress-whitelist
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: ingress-whitelist
+          containers:
+          - name: ingress-whitelist
+            image: wonko/ingress-whitelist:0.0.2
+            imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure

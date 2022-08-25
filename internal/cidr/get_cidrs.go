@@ -1,6 +1,7 @@
 package cidr
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,9 +11,14 @@ import (
 
 func GetCIDRList(uris []string) (string, error) {
 	var cidrList []string
+	// TODO: Fix this right but for now let's just ignore it
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
 
 	for i := range uris {
-		res, err := http.Get(uris[i])
+		res, err := client.Get(uris[i])
 		if err != nil {
 			return "", err
 		}

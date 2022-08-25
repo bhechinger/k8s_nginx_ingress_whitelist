@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	cfg, err := config.New("0.0.1", "K8s CronJob to update NGINX Ingress whitelist")
+	cfg, err := config.New("0.0.2", "K8s CronJob to update NGINX Ingress whitelist")
 	if err != nil {
 		log.Fatal(err)
 	}
